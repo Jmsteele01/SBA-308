@@ -4,7 +4,8 @@
     // average grade
     // list of assignments (submission score / max points)
 
-const currentDate = "2025-03-2025"
+//listing today's date
+const currentDate = "2023-02-01"
 
 const CourseInfo = {
     id: 451,
@@ -88,10 +89,27 @@ const CourseInfo = {
     let myID = submissions[0].learner_id;
     console.log(myID);
 
-    // for(let x = 0; x < submissions.length(); x++)
-    // {
+    let myAve = 0;
+    let myPoints = 0;
+    let totalPoints = parseInt(ag.assignments.points_possible);
+    console.log(totalPoints);
 
-    // };
+    let todayDate = ""+currentDate.slice(0,4)+currentDate.slice(5,7)+currentDate.slice(8,11);
+
+    for(let x = 0; x < 2; x++)
+    {
+        let dueDate = ""+ag.assignments[x].due_at.slice(0,4)+ag.assignments[x].due_at.slice(5,7)+ag.assignments[x].due_at.slice(8,11);
+        if(todayDate >= dueDate)
+        {
+            console.log("Due");
+        }
+        else
+        {
+            console.log("Not due");
+        }
+    };
+
+    let myAssignments = [];
 
     const result = [
       {
