@@ -83,16 +83,41 @@ const CourseInfo = {
       }
     }
   ];
+
+function sum(x, y){ return x + y};
+
+  function getPointTotal(log, id)
+  {
+    let points = 0;
+    if( log == AssignmentGroup.assignments)
+    {
+        log.forEach(log => points += log.points_possible);
+        return points;
+    }
+    else if(log == LearnerSubmissions)
+    {
+        for(x=0; x < log.length; x++)
+        {
+            if(id == log[x].learner_id)
+            {
+                points += log[x].submission.score;
+            }
+        }
+        return points;
+    }
+  }
+
   
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
     let myID = submissions[0].learner_id;
     console.log(myID);
+    
+    let myPoints = getPointTotal(submissions, myID);
+    let possPoints = getPointTotal(ag.assignments);
+    let myGrade = myPoints/possPoints;
 
-    let myAve = 0;
-    let myPoints = 0;
-    let totalPoints = parseInt(ag.assignments.points_possible);
-    console.log(totalPoints);
+    console.log(myGrade);
 
     let todayDate = ""+currentDate.slice(0,4)+currentDate.slice(5,7)+currentDate.slice(8,11);
 
