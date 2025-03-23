@@ -1,30 +1,10 @@
-// const assignmentGroup = {id: number, string: string, course_id: number, group_weight: number, assignments: [assignmentInfo]};
-// const assignmentInfo = {id: number, name: string, due_at: dateString, points_possible: number};
-// const learnerSubmission = {learner_id: number, assignment_id: number, submission: {submitted_at: dateString, score: number}};
 
-{
-    // the ID of the learner for which this data has been collected
-    //"id": number,
-    // the learner’s total, weighted average, in which assignments
-    // with more points_possible should be counted for more
-    // e.g. a learner with 50/100 on one assignment and 190/200 on another
-    // would have a weighted average score of 240/300 = 80%.
-    //"avg": number,
-    // each assignment should have a key with its ID,
-    // and the value associated with it should be the percentage that
-    // the learner scored on the assignment (submission.score / points_possible)
-    //<assignment_id>: number,
-    // if an assignment is not yet due, it should not be included in either
-    // the average or the keyed dictionary of scores
-}
+    // Output: 
+    // Student ID
+    // average grade
+    // list of assignments (submission score / max points)
 
-// getLearnerDaa(courseInfo, assignmentGroup, [learnerSubmission])
-// {
-//     let results = [];
-//     return results; 
-// };
-
-const currentDate = [3, 21, 2025]; 
+const currentDate = "2025-03-2025"
 
 const CourseInfo = {
     id: 451,
@@ -105,6 +85,14 @@ const CourseInfo = {
   
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
+    let myID = submissions[0].learner_id;
+    console.log(myID);
+
+    // for(let x = 0; x < submissions.length(); x++)
+    // {
+
+    // };
+
     const result = [
       {
         id: 125,
@@ -125,5 +113,5 @@ const CourseInfo = {
   
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
-  console.log(result);
+  //console.log(result);
   
