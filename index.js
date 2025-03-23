@@ -1,7 +1,6 @@
-const courseInfo = {id, name};
-const assignmentGroup = {id: number, string: string, course_id: number, group_weight: number, assignments: [assignmentInfo]};
-const assignmentInfo = {id: number, name: string, due_at: dateString, points_possible: number};
-const learnerSubmission = {learner_id: number, assignment_id: number, submission: {submitted_at: dateString, score: number}};
+// const assignmentGroup = {id: number, string: string, course_id: number, group_weight: number, assignments: [assignmentInfo]};
+// const assignmentInfo = {id: number, name: string, due_at: dateString, points_possible: number};
+// const learnerSubmission = {learner_id: number, assignment_id: number, submission: {submitted_at: dateString, score: number}};
 
 {
     // the ID of the learner for which this data has been collected
@@ -19,11 +18,13 @@ const learnerSubmission = {learner_id: number, assignment_id: number, submission
     // the average or the keyed dictionary of scores
 }
 
-getLearnerDaa(courseInfo, assignmentGroup, [learnerSubmission])
-{
-    let results = [];
-    return results; 
-}
+// getLearnerDaa(courseInfo, assignmentGroup, [learnerSubmission])
+// {
+//     let results = [];
+//     return results; 
+// };
+
+const currentDate = [3, 21, 2025]; 
 
 const CourseInfo = {
     id: 451,
