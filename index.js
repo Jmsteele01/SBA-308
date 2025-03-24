@@ -2,12 +2,10 @@
     // Output: 
     // Student ID
     // average grade
-    // list of assignments (submission score / max points)
+    // list of assignment grades
 
 //listing today's date
 const currentDate = "2025-02-01"
-
-
 
 const CourseInfo = {
     id: 451,
@@ -98,6 +96,7 @@ const CourseInfo = {
     }
   }
 
+  //returns letter grade based on percentage value
   function GetLetterGrade(myGrade)
   {
     let s = "";
@@ -153,14 +152,14 @@ const CourseInfo = {
               currentScore = Number(submissions[x].submission.score);
               if(dateConversion(ag.assignments[y].due_at) < dateConversion(submissions[x].submission.submitted_at))
               {
-                currentScore -= 10;
+                currentScore -= 10; //late work penalty
               }
               gradeBreakdown.assignment_scores.push(currentScore);
               myPoints += currentScore;
             }
         }
       }
-      gradeBreakdown.percent = (myPoints/possPoints)*100;
+      gradeBreakdown.percent = (myPoints/possPoints)*100; //percent number
       gradeBreakdown.letter_grade = GetLetterGrade(gradeBreakdown.percent);
       return gradeBreakdown;
 
@@ -169,9 +168,9 @@ const CourseInfo = {
   
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
-    let myID = submissions[0].learner_id;
+   
+    //gets array of uniquer student ids
     let studentIDs = [];
-
     for(let x=0; x < submissions.length; x++)
     {
       if(!studentIDs.includes(submissions[x].learner_id))
@@ -179,12 +178,14 @@ const CourseInfo = {
         studentIDs.push(submissions[x].learner_id);
       }
     }
+
+    //gets grades for each unique student ID
     studentIDs.forEach((id) => {
     let myGrade = getGrade(ag, id, submissions);
 
     console.log("Student ID: "+myGrade.student_id);
     console.log(course.name+" grades");
-    console.log(myGrade.percent);
+    console.log(myGrade.percent+"%");
     console.log(myGrade.letter_grade);
     console.log("Individual scores: "+myGrade.assignment_scores.join(", "))
     console.log("\n");
