@@ -144,19 +144,21 @@ const CourseInfo = {
       //getting student score
       let myPoints = 0; 
       let currentScore = 0;
-      for(let x=0; x < submissions.length && x < ag.assignments.length; x++)
+      for(let x=0; x < submissions.length; x++)
       {
-          if(dateConversion(ag.assignments[x].due_at) <= dateConversion(currentDate) && submissions[x].learner_id == id)
+        for(let y = 0; y < ag.assignments.length; y++)
+        { 
+          if(dateConversion(ag.assignments[y].due_at) <= dateConversion(currentDate) && ag.assignments[y].id == submissions[x].assignment_id && submissions[x].learner_id == id)
             {
               currentScore = Number(submissions[x].submission.score);
-              if(dateConversion(ag.assignments[x].due_at) > dateConversion(submissions[x].submission.submitted_at))
+              if(dateConversion(ag.assignments[y].due_at) < dateConversion(submissions[x].submission.submitted_at))
               {
                 currentScore -= 10;
               }
               gradeBreakdown.assignment_scores.push(currentScore);
               myPoints += currentScore;
-              currentScore = 0;
             }
+        }
       }
       gradeBreakdown.percent = (myPoints/possPoints)*100;
       gradeBreakdown.letter_grade = GetLetterGrade(gradeBreakdown.percent);
@@ -168,44 +170,26 @@ const CourseInfo = {
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
     let myID = submissions[0].learner_id;
-    studentIDs = [];
+    let studentIDs = [];
 
     for(let x=0; x < submissions.length; x++)
     {
-      if(studentIDs.find(submissions[x].learner_id) != true)
+      if(!studentIDs.includes(submissions[x].learner_id))
       {
         studentIDs.push(submissions[x].learner_id);
       }
     }
-    foreach => studentIDs{
-    let myGrade = getGrade(ag, studentIDs, submissions);
+    studentIDs.forEach((id) => {
+    let myGrade = getGrade(ag, id, submissions);
 
     console.log("Student ID: "+myGrade.student_id);
     console.log(course.name+" grades");
     console.log(myGrade.percent);
     console.log(myGrade.letter_grade);
-    }
-
-
-    let myAssignments = [];
-
-    const result = [
-      {
-        id: 125,
-        avg: 0.985, // (47 + 150) / (50 + 150)
-        1: 0.94, // 47 / 50
-        2: 1.0 // 150 / 150
-      },
-      {
-        id: 132,
-        avg: 0.82, // (39 + 125) / (50 + 150)
-        1: 0.78, // 39 / 50
-        2: 0.833 // late: (140 - 15) / 150
-      }
-    ];
-  
-    return result;
+    console.log("Individual scores: "+myGrade.assignment_scores.join(", "))
+    console.log("\n");
+    });
   }
   
-  const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
+getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
   
