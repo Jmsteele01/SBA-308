@@ -5,7 +5,9 @@
     // list of assignments (submission score / max points)
 
 //listing today's date
-const currentDate = "2023-02-01"
+const currentDate = "2025-02-01"
+
+
 
 const CourseInfo = {
     id: 451,
@@ -84,55 +86,106 @@ const CourseInfo = {
     }
   ];
 
-function sum(x, y){ return x + y};
-
-  function getPointTotal(log, id)
+  function dateConversion(date)
   {
-    let points = 0;
-    if( log == AssignmentGroup.assignments)
-    {
-        log.forEach(log => points += log.points_possible);
-        return points;
-    }
-    else if(log == LearnerSubmissions)
-    {
-        for(x=0; x < log.length; x++)
-        {
-            if(id == log[x].learner_id)
-            {
-                points += log[x].submission.score;
-            }
-        }
-        return points;
+    if(typeof date == "string")
+      {
+        return ""+date.slice(0,4)+date.slice(5,7)+date.slice(8,11);
+      }
+    else
+    {    
+      return null;
     }
   }
 
+  function GetLetterGrade(myGrade)
+  {
+    let s = "";
+    switch(true)
+    {
+      case (myGrade>=90):
+        s = "A"
+        break;
+      case (myGrade>=80):
+        s = "B"
+        break;
+        case (myGrade>=70):
+          s = "C"
+          break;
+        case (myGrade>=60):
+          s = "D"
+          break;
+        default:
+          s = "F"
+    };
+    return s;
+  }
+
+  function getGrade(ag, id, submissions)
+  {
+    //getting the total possible points
+    gradeBreakdown = {
+      student_id: id,
+      percent: 0,
+      letter_grade: "?",
+      assignment_scores: []
+      }
+      
+       let possPoints = 0;
+
+      for(let x = 0; x < ag.assignments.length; x++)
+      {
+        if(dateConversion(ag.assignments[x].due_at) <= dateConversion(currentDate))
+        {
+          possPoints += ag.assignments[x].points_possible;
+        }
+      }
+
+      //getting student score
+      let myPoints = 0; 
+      let currentScore = 0;
+      for(let x=0; x < submissions.length && x < ag.assignments.length; x++)
+      {
+          if(dateConversion(ag.assignments[x].due_at) <= dateConversion(currentDate) && submissions[x].learner_id == id)
+            {
+              currentScore = Number(submissions[x].submission.score);
+              if(dateConversion(ag.assignments[x].due_at) > dateConversion(submissions[x].submission.submitted_at))
+              {
+                currentScore -= 10;
+              }
+              gradeBreakdown.assignment_scores.push(currentScore);
+              myPoints += currentScore;
+              currentScore = 0;
+            }
+      }
+      gradeBreakdown.percent = (myPoints/possPoints)*100;
+      gradeBreakdown.letter_grade = GetLetterGrade(gradeBreakdown.percent);
+      return gradeBreakdown;
+
+  }
+      
   
   function getLearnerData(course, ag, submissions) {
     // here, we would process this data to achieve the desired result.
     let myID = submissions[0].learner_id;
-    console.log(myID);
-    
-    let myPoints = getPointTotal(submissions, myID);
-    let possPoints = getPointTotal(ag.assignments);
-    let myGrade = myPoints/possPoints;
+    studentIDs = [];
 
-    console.log(myGrade);
-
-    let todayDate = ""+currentDate.slice(0,4)+currentDate.slice(5,7)+currentDate.slice(8,11);
-
-    for(let x = 0; x < 2; x++)
+    for(let x=0; x < submissions.length; x++)
     {
-        let dueDate = ""+ag.assignments[x].due_at.slice(0,4)+ag.assignments[x].due_at.slice(5,7)+ag.assignments[x].due_at.slice(8,11);
-        if(todayDate >= dueDate)
-        {
-            console.log("Due");
-        }
-        else
-        {
-            console.log("Not due");
-        }
-    };
+      if(studentIDs.find(submissions[x].learner_id) != true)
+      {
+        studentIDs.push(submissions[x].learner_id);
+      }
+    }
+    foreach => studentIDs{
+    let myGrade = getGrade(ag, studentIDs, submissions);
+
+    console.log("Student ID: "+myGrade.student_id);
+    console.log(course.name+" grades");
+    console.log(myGrade.percent);
+    console.log(myGrade.letter_grade);
+    }
+
 
     let myAssignments = [];
 
@@ -155,6 +208,4 @@ function sum(x, y){ return x + y};
   }
   
   const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-  
-  //console.log(result);
   
